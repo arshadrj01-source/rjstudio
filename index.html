@@ -83,10 +83,46 @@
     .pill-paid { background: rgba(0, 215, 100, 0.1); color: #00d764; }
     .pill-pending { background: rgba(124, 92, 255, 0.1); color: var(--accent); }
 
-    @media (max-width: 1000px) {
+    /* Classes replacing inline styles for mobile compatibility */
+    .project-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px; }
+    .action-btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    @media (max-width: 1000px) and (min-width: 769px) {
       .sidebar { width: 80px; padding: 30px 10px; }
       .sidebar-brand, .nav-btn span { display: none; }
       .main-content { margin-left: 80px; padding: 25px; }
+    }
+
+    /* --- MOBILE OPTIMIZATION ADDED HERE --- */
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: auto; position: fixed; bottom: 0; left: 0; right: 0; padding: 10px 5px; border-right: none; border-top: 1px solid var(--line); flex-direction: row; z-index: 1000; }
+      .sidebar-brand { display: none; }
+      .nav-group { flex-direction: row; margin: 0; width: 100%; justify-content: space-around; gap: 5px; }
+      .nav-btn { padding: 12px; justify-content: center; }
+      .nav-btn span { display: none; }
+      .nav-group > button[onclick="window.setTab('albums')"] { margin-top: 0 !important; border-top: none !important; padding-top: 12px !important; }
+      .sidebar > button.nav-btn { display: none; } /* Hides exit button on bottom bar */
+
+      .main-content { margin-left: 0; padding: 20px; padding-bottom: 90px; }
+      
+      .header-actions { flex-direction: column; align-items: flex-start; gap: 15px; }
+      .control-row { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .search-bar { grid-column: span 2; width: 100%; }
+      .control-row .btn-primary { grid-column: span 2; width: 100%; }
+
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+      .stat-card { padding: 15px; }
+      .stat-card h3 { font-size: 20px; }
+
+      .project-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+      .project-meta { flex-direction: column; gap: 5px; }
+
+      .drawer { padding: 30px 20px; }
+      .form-grid, .project-details-grid, .action-btn-grid { grid-template-columns: 1fr; gap: 15px; }
+      .full-width { grid-column: span 1; }
+
+      .landing h1 { font-size: 50px; }
+      .landing-btns { flex-direction: column; width: 100%; padding: 0 20px; }
     }
   </style>
 </head>
@@ -346,7 +382,7 @@
     const d = document.getElementById('drawer');
     d.innerHTML = `
       <h1 style="font-family:'Playfair Display'; margin-top:0;">${p.name}</h1>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px; margin-bottom:30px;">
+      <div class="project-details-grid">
         <div><label style="font-size:10px; color:var(--muted)">PHONE</label><div>${p.phone || 'N/A'}</div></div>
         <div><label style="font-size:10px; color:var(--muted)">WEDDING DATE</label><div>${p.weddingDate || 'N/A'}</div></div>
         <div><label style="font-size:10px; color:var(--muted)">DEADLINE</label><div style="color:var(--accent); font-weight:700;">${p.deadline || 'N/A'}</div></div>
@@ -365,7 +401,7 @@
         ${p.isAlbum ? `<button class="btn-primary" style="background:#00d764" onclick="window.updateAlbumPaid('${p.id}', ${!p.albumPaid})">${p.albumPaid ? 'Unmark Album Paid' : 'Mark Album Paid'}</button>` : ''}
         ${p.isAlbum && p.albumStatus === 'pending' ? `<button class="btn-primary" style="background:#7c5cff" onclick="window.updateAlbumStatus('${p.id}', 'completed')">Mark Album Done ✓</button>` : ''}
         <button class="btn-outline" onclick="window.openEditDrawer('${p.id}')">Edit Project Details</button>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <div class="action-btn-grid">
             <button class="btn-outline" onclick="window.moveStage('${p.id}', 'editing')">To Editing</button>
             <button class="btn-outline" onclick="window.moveStage('${p.id}', 'delivery')">To Delivery</button>
         </div>
